@@ -21,22 +21,45 @@ $skelbimai = array(
     array('id' => '16168','text' => 'Eko BRIKETAI Gamintoju kainomis','cost' => '500','onPay' => '0')
 );
 
-$skelbimuSk=0;
-$apmoketi = 0;
-$sumaApmoketu=0;
-$sumaNeapmoketu=0;
-    foreach ($skelbimai as $key=>$value){
-        if($skelbimai[$key]['onPay'] != 0){
-            $apmoketi++;
-            $sumaApmoketu+=(int)$skelbimai[$key]['cost'];
-        }else{
 
-            $sumaNeapmoketu+=(int)$skelbimai[$key]['cost'];
-        }
+/**
+ * šitas ifas keičia lygiavima elementų naudojant rodykles
+ */
+    if(isset($_GET['lygiuoti'])&& isset($_GET['direction'])){
 
-        $skelbimuSk++;
+        $lygiuoti=$_GET['lygiuoti'];
+        $direction=$_GET['direction'];
+
+            if ($lygiuoti == $lygiuoti){
+                if ($direction == 'dsc') {
+                    usort($skelbimai, fn($a, $b) => $a[$lygiuoti] <=> $b[$lygiuoti]);
+                }elseif(($direction == 'asc')){
+                    usort($skelbimai, fn($a, $b) => $b[$lygiuoti] <=> $a[$lygiuoti]);
+                }
+            }
+
     };
-echo $sumaApmoketu."<br>".$sumaNeapmoketu;
+
+
+
+    $skelbimuSk=0;
+    $apmoketi = 0;
+    $sumaApmoketu=0;
+    $sumaNeapmoketu=0;
+        foreach ($skelbimai as $key=>$value){
+            if($skelbimai[$key]['onPay'] != 0){
+                $apmoketi++;
+                $sumaApmoketu+=(int)$skelbimai[$key]['cost'];
+            }else{
+
+                $sumaNeapmoketu+=(int)$skelbimai[$key]['cost'];
+            }
+
+            $skelbimuSk++;
+        };
+
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -68,10 +91,10 @@ echo $sumaApmoketu."<br>".$sumaNeapmoketu;
 <table class="table table-success table-striped table-hover rounded table-bordered border-primary table-sm mt-5">
    <thead>
    <tr>
-       <th>ID#</th>
-       <th>Tekstas</th>
-       <th>Kaina</th>
-       <th>Apmokėjimo data</th>
+       <th><a class="text-decoration-none text-dark bold" href="?lygiuoti=id&direction=dsc">↓</a>ID#<a class="text-decoration-none text-dark bold" href="?lygiuoti=id&direction=asc">↑</a></th>
+       <th><a class="text-decoration-none text-dark bold" href="?lygiuoti=text&direction=dsc">↓</a>Tekstas<a class="text-decoration-none text-dark bold" href="?lygiuoti=text&direction=asc">↑</a></th>
+       <th><a class="text-decoration-none text-dark bold" href="?lygiuoti=cost&direction=dsc">↓</a>Kaina<a class="text-decoration-none text-dark bold" href="?lygiuoti=cost&direction=asc">↑</a></th>
+       <th><a class="text-decoration-none text-dark bold" href="?lygiuoti=onPay&direction=dsc">↓</a>Apmokėjimo data <a class="text-decoration-none text-dark bold" href="?lygiuoti=onPay&direction=asc">↑</a></th>
    </tr>
    </thead>
     <tbody>
